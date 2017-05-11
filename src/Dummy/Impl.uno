@@ -11,5 +11,6 @@ namespace Fuse.MediaQuery
     public static extern(!Mobile) class MediaQuery
     {
         internal static void Initialize() {}
+        public void MusicQuery(string artist) {}
     }
 }

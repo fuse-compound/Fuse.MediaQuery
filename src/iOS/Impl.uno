@@ -8,8 +8,20 @@ using Fuse.Scripting;
 
 namespace Fuse.MediaQuery
 {
-    public static extern(!Mobile) class MediaQuery
+    public static extern(iOS) class MediaQuery
     {
         internal static void Initialize() {}
+
+        public void MusicQuery(string artist)
+        {
+            QueryInner(artist);
+        }
+
+        public ObjC.Object[] QueryInner(string artist)
+        @{
+            MPMediaQuery *everything = [[MPMediaQuery alloc] init];
+            NSArray* items = [everything items];
+            return items;
+        @}
     }
 }
