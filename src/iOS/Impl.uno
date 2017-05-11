@@ -8,20 +8,25 @@ using Fuse.Scripting;
 
 namespace Fuse.MediaQuery
 {
-    public static extern(iOS) class MediaQuery
+    [ForeignInclude(Language.ObjC, "AVFoundation/AVFoundation.h")]
+    [ForeignInclude(Language.ObjC, "MediaPlayer/MediaPlayer.h")]
+    [Require("Xcode.Framework", "MediaPlayer")]
+    [Require("Xcode.Framework", "CoreImage")]
+    [ForeignInclude(Language.ObjC, "CoreImage/CoreImage.h")]
+    extern(iOS)
+    class MusicQuery : MusicPromise
     {
-        internal static void Initialize() {}
-
-        public void MusicQuery(string artist)
+        public MusicQuery(string artist)
         {
             QueryInner(artist);
+            Resolve(_results);
         }
 
-        public ObjC.Object[] QueryInner(string artist)
+        [Foreign(Language.ObjC)]
+        public void QueryInner(string artist)
         @{
             MPMediaQuery *everything = [[MPMediaQuery alloc] init];
             NSArray* items = [everything items];
-            return items;
         @}
     }
 }

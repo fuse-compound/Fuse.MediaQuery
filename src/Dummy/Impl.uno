@@ -8,9 +8,12 @@ using Fuse.Scripting;
 
 namespace Fuse.MediaQuery
 {
-    public static extern(!Mobile) class MediaQuery
+    extern(!MOBILE)
+    class MusicQuery : MusicPromise
     {
-        internal static void Initialize() {}
-        public void MusicQuery(string artist) {}
+        public MusicQuery(string artist)
+        {
+            Resolve(_results);
+        }
     }
 }

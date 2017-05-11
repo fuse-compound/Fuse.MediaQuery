@@ -19,32 +19,35 @@ namespace Fuse.MediaQuery
             if(_instance != null) return;
             Resource.SetGlobalKey(_instance = this, "FuseJS/MediaQuery");
 
-            MediaQuery.Initialize();
-
-            AddMember(new NativeFunction("fetch", (NativeCallback)Fetch));
+            AddMember(new NativePromise<List<MusicItem>, Scripting.Object>("fetch", Fetch, MusicItemToJS));
         }
 
-        static object Fetch(Context c, object[] args)
+        static Future<List<MusicItem>> Fetch(object[] args)
         {
             var queryObj = (Scripting.Object)args[0];
-            string kind = queryObj["kind"];
+            var kind = (string)queryObj["kind"];
 
             if (kind == "music")
-                return MediaQuery.Query(MusicQueryFromJS(queryObj));
+                return MusicQueryFromJS(queryObj);
 
-            return null
+            return null;
         }
 
-        static object MusicQueryFromJS(Scripting.Object query)
+        static Future<List<MusicItem>> MusicQueryFromJS(Scripting.Object query)
         {
-            MediaQuery.MusicQuery(StrOrNull("artist"));
-            return null
+            return new MusicQuery(TryGet<string>(query, "artist"));
         }
 
-        // {TODO} what's the correct method for this?
-        static string StrOrNull(Scripting.Object obj, string key)
+        static T TryGet<T>(Scripting.Object obj, string key)
         {
-            return query.ContainsKey(key) ? query[key] : null;
+            return obj.ContainsKey(key) ? Marshal.ToType<T>(obj[key]) : default(T);
+        }
+
+
+        static Scripting.Object MusicItemToJS(Context c, List<MusicItem> cv)
+        {
+            var res = c.NewObject();
+            return res;
         }
     }
 }
