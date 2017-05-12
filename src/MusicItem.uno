@@ -28,6 +28,11 @@ namespace Fuse.MediaQuery
             Resolve(_results);
         }
 
+        protected void Reject(string message)
+        {
+            Reject(new Exception(message));
+        }
+
         protected void PushResult(string path)
         {
             _results.Add(new MusicItem(path));
