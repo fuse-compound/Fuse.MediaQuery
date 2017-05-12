@@ -11,15 +11,26 @@ namespace Fuse.MediaQuery
 {
     public sealed class MusicItem
     {
+        public string Path;
+
+        public MusicItem(string path)
+        {
+            Path = path;
+        }
     }
 
     class MusicPromise : Promise<List<MusicItem>>
     {
-        protected List<MusicItem> _results = new List<MusicItem>();
+        List<MusicItem> _results = new List<MusicItem>();
 
-        protected void PushResult()
+        protected void Resolve()
         {
-            _results.Add(new MusicItem());
+            Resolve(_results);
+        }
+
+        protected void PushResult(string path)
+        {
+            _results.Add(new MusicItem(path));
         }
     }
 }

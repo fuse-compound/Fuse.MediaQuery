@@ -13,7 +13,7 @@ namespace Fuse.MediaQuery
     {
         public MusicQuery(string artist)
         {
-            Resolve(_results);
+            Resolve();
         }
     }
 }

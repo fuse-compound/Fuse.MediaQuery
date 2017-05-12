@@ -19,7 +19,9 @@ namespace Fuse.MediaQuery
             if(_instance != null) return;
             Resource.SetGlobalKey(_instance = this, "FuseJS/MediaQuery");
 
-            AddMember(new NativePromise<List<MusicItem>, Scripting.Object>("fetch", Fetch, MusicItemToJS));
+            AddMember(new NativePromise<List<MusicItem>, Scripting.Array>("fetch", Fetch, MusicItemToJS));
+
+            AddMember(new NativeProperty<string, string>("Music", "music"));
         }
 
         static Future<List<MusicItem>> Fetch(object[] args)
@@ -30,6 +32,7 @@ namespace Fuse.MediaQuery
             if (kind == "music")
                 return MusicQueryFromJS(queryObj);
 
+            debug_log "--- DIDNT MATCH ANY KIND ---";
             return null;
         }
 
@@ -44,10 +47,16 @@ namespace Fuse.MediaQuery
         }
 
 
-        static Scripting.Object MusicItemToJS(Context c, List<MusicItem> cv)
+        static Scripting.Array MusicItemToJS(Context c, List<MusicItem> cv)
         {
-            var res = c.NewObject();
-            return res;
+            var arr = new List<object>();
+            foreach (var track in cv)
+            {
+                var jt = c.NewObject();
+                jt["path"] = track.Path;
+                arr.Add(jt);
+            }
+            return c.NewArray(arr.ToArray());
         }
     }
 }

@@ -9,7 +9,8 @@ var foo = function() {
 		"artist": "Splen"
 	};
 	MediaQuery.fetch(query).then(function(results) {
-		console.log("Here it is!:" + results);
+		var json_results = JSON.stringify(results);
+		console.log("Here it is!:" + json_results);
 	}).catch(function(e) {
 		console.log("Well damn:" + e);
 	});

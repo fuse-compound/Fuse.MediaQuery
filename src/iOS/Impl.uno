@@ -19,14 +19,24 @@ namespace Fuse.MediaQuery
         public MusicQuery(string artist)
         {
             QueryInner(artist);
-            Resolve(_results);
+            Resolve();
         }
 
         [Foreign(Language.ObjC)]
         public void QueryInner(string artist)
         @{
-            MPMediaQuery *everything = [[MPMediaQuery alloc] init];
-            NSArray* items = [everything items];
+            MPMediaQuery* matches = [[MPMediaQuery alloc] init];
+
+            if (artist!=NULL)
+            {
+                MPMediaPropertyPredicate* artistPred = [MPMediaPropertyPredicate predicateWithValue:artist forProperty:MPMediaItemPropertyArtist];
+                [matches addFilterPredicate: artistPred];
+            }
+
+            for (MPMediaItem* match in [matches items])
+            {
+                @{MusicQuery:Of(_this).PushResult(string):Call([match.assetURL absoluteString])};
+            }
         @}
     }
 }
