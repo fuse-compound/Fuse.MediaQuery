@@ -16,8 +16,11 @@ namespace Fuse.MediaQuery
     extern(Android)
     class TrackQuery : TrackPromise
     {
+        string _path = "";
+        string _title = "";
+        string _artist = "";
+        string _album = "";
 
-        string _artist;
         public TrackQuery(string artist)
         {
             _artist = artist;
@@ -26,9 +29,9 @@ namespace Fuse.MediaQuery
         }
 
         [Foreign(Language.Java)]
-        public void QueryInner(string artist)
+        public void QueryInner(string requestedArtist)
         @{
-            String selection = MMQB.Music().AndArtist(artist).Build();
+            String selection = MMQB.Music().AndArtist(requestedArtist).Build();
             String sortOrder = MediaStore.Audio.Media.TITLE + " ASC";
 
             ContentResolver cr = com.fuse.Activity.getRootActivity().getContentResolver();
@@ -37,10 +40,11 @@ namespace Fuse.MediaQuery
             {
                 while(cur.moveToNext())
                 {
-                    String data = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DATA));
+                    String path = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DATA));
+                    String title = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE));
+                    String artist = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST));
                     String album = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-                    debug_log(data + album);
-                    @{TrackQuery:Of(_this).PushResult(string):Call(data)};
+                    @{TrackQuery:Of(_this).PushResult(string,string,string,string):Call(path,title,artist,album)};
                 }
             }
             cur.close();

@@ -13,6 +13,7 @@ namespace Fuse.MediaQuery
     public sealed class MediaQueryModule : NativeEventEmitterModule
     {
         static readonly MediaQueryModule _instance;
+        static readonly string _trackQuery = "Music";
 
         public MediaQueryModule() : base(false)
         {
@@ -21,7 +22,7 @@ namespace Fuse.MediaQuery
 
             AddMember(new NativePromise<List<TrackItem>, Scripting.Array>("fetch", Fetch, TrackItemToJS));
 
-            AddMember(new NativeProperty<string, string>("Music", "music"));
+            AddMember(new NativeProperty<string, string>("Music", _trackQuery));
         }
 
         static Future<List<TrackItem>> Fetch(object[] args)
@@ -29,7 +30,7 @@ namespace Fuse.MediaQuery
             var queryObj = (Scripting.Object)args[0];
             var kind = (string)queryObj["kind"];
 
-            if (kind == "track")
+            if (kind == _trackQuery)
                 return TrackQueryFromJS(queryObj);
 
             debug_log "--- DIDNT MATCH ANY KIND ---";
@@ -55,6 +56,9 @@ namespace Fuse.MediaQuery
                 var jt = c.NewObject();
                 jt["kind"] = "track";
                 jt["path"] = track.Path;
+                jt["title"] = track.Title;
+                jt["artist"] = track.Artist;
+                jt["album"] = track.Album;
                 arr.Add(jt);
             }
             return c.NewArray(arr.ToArray());

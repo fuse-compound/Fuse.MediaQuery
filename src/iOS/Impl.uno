@@ -35,7 +35,11 @@ namespace Fuse.MediaQuery
 
             for (MPMediaItem* match in [matches items])
             {
-                @{TrackQuery:Of(_this).PushResult(string):Call([match.assetURL absoluteString])};
+                NSString* path = [match.assetURL absoluteString];
+                NSString* title = match.title;
+                NSString* artist = match.artist;
+                NSString* album = match.albumTitle;
+                @{TrackQuery:Of(_this).PushResult(string,string,string,string):Call(path, title, artist, album)};
             }
         @}
     }
