@@ -25,4 +25,13 @@ namespace Fuse.MediaQuery
             Resolve();
         }
     }
+
+    extern(!MOBILE)
+    class AlbumQuery : AlbumPromise
+    {
+        public AlbumQuery(string album)
+        {
+            Resolve();
+        }
+    }
 }

@@ -25,7 +25,18 @@ var artists = function() {
 	});
 };
 
+var albums = function() {
+	var query = {};
+	MediaQuery.albums(query).then(function(results) {
+		var json_results = JSON.stringify(results);
+		console.log("Here it is!:" + json_results);
+	}).catch(function(e) {
+		console.log("Well damn:" + e);
+	});
+};
+
 module.exports = {
 	tracks: tracks,
-	artists: artists
+	artists: artists,
+	albums: albums
 };

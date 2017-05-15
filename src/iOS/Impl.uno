@@ -76,4 +76,13 @@ namespace Fuse.MediaQuery
             }
         @}
     }
+
+    extern(iOS)
+    class AlbumQuery : AlbumPromise
+    {
+        public AlbumQuery(string album)
+        {
+            Resolve();
+        }
+    }
 }

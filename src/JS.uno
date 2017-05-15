@@ -14,6 +14,11 @@ namespace Fuse.MediaQuery
     {
         static readonly MediaQueryModule _instance;
 
+        static T TryGet<T>(Scripting.Object obj, string key)
+        {
+            return obj.ContainsKey(key) ? Marshal.ToType<T>(obj[key]) : default(T);
+        }
+
         public MediaQueryModule() : base(false)
         {
             if(_instance != null) return;
@@ -21,6 +26,7 @@ namespace Fuse.MediaQuery
 
             AddMember(new NativePromise<List<TrackItem>, Scripting.Array>("music", Music, TrackItemToJS));
             AddMember(new NativePromise<List<ArtistItem>, Scripting.Array>("artists", Artists, ArtistItemToJS));
+            AddMember(new NativePromise<List<AlbumItem>, Scripting.Array>("albums", Albums, AlbumItemToJS));
         }
 
         static Future<List<TrackItem>> Music(object[] args)
@@ -35,6 +41,12 @@ namespace Fuse.MediaQuery
             return ArtistQueryFromJS(queryObj);
         }
 
+        static Future<List<AlbumItem>> Albums(object[] args)
+        {
+            var queryObj = (Scripting.Object)args[0];
+            return AlbumQueryFromJS(queryObj);
+        }
+
         static Future<List<TrackItem>> TrackQueryFromJS(Scripting.Object query)
         {
             return new TrackQuery(TryGet<string>(query, "artist"));
@@ -42,14 +54,13 @@ namespace Fuse.MediaQuery
 
         static Future<List<ArtistItem>> ArtistQueryFromJS(Scripting.Object query)
         {
-            return new ArtistQuery(TryGet<string>(query, "artist"));
+            return new ArtistQuery(TryGet<string>(query, "name"));
         }
 
-        static T TryGet<T>(Scripting.Object obj, string key)
+        static Future<List<AlbumItem>> AlbumQueryFromJS(Scripting.Object query)
         {
-            return obj.ContainsKey(key) ? Marshal.ToType<T>(obj[key]) : default(T);
+            return new AlbumQuery(TryGet<string>(query, "name"));
         }
-
 
         static Scripting.Array TrackItemToJS(Context c, List<TrackItem> cv)
         {
@@ -73,6 +84,18 @@ namespace Fuse.MediaQuery
             {
                 var jt = c.NewObject();
                 jt["name"] = artist.Name;
+                arr.Add(jt);
+            }
+            return c.NewArray(arr.ToArray());
+        }
+
+        static Scripting.Array AlbumItemToJS(Context c, List<AlbumItem> cv)
+        {
+            var arr = new List<object>();
+            foreach (var album in cv)
+            {
+                var jt = c.NewObject();
+                jt["name"] = album.Name;
                 arr.Add(jt);
             }
             return c.NewArray(arr.ToArray());

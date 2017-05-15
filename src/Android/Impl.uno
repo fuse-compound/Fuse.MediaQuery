@@ -9,6 +9,9 @@ using Fuse.Scripting;
 
 namespace Fuse.MediaQuery
 {
+    //------------------------------------------------------------
+    // Tracks
+
     [ForeignInclude(Language.Java, "android.content.ContentResolver")]
     [ForeignInclude(Language.Java, "android.database.Cursor")]
     [ForeignInclude(Language.Java, "android.provider.MediaStore")]
@@ -62,6 +65,9 @@ namespace Fuse.MediaQuery
         }
     }
 
+    //------------------------------------------------------------
+    // Artists
+
     [ForeignInclude(Language.Java, "android.content.ContentResolver")]
     [ForeignInclude(Language.Java, "android.database.Cursor")]
     [ForeignInclude(Language.Java, "android.provider.MediaStore")]
@@ -69,30 +75,30 @@ namespace Fuse.MediaQuery
     extern(Android)
     class ArtistQuery : ArtistPromise
     {
-        string _path = "";
-        string _title = "";
-        string _artist = "";
-        string _album = "";
+        string _name = "";
 
-        public ArtistQuery(string artist)
+        public ArtistQuery(string name)
         {
-            _artist = artist;
+            _name = name;
             var permissionPromise = Permissions.Request(Permissions.Android.WRITE_EXTERNAL_STORAGE);
             permissionPromise.Then(OnPermitted, OnRejected);
         }
 
         [Foreign(Language.Java)]
-        public void QueryInner(string requestedArtist)
+        public void QueryInner(string name)
         @{
             String sortOrder = MediaStore.Audio.Media.ARTIST + " ASC";
             ContentResolver cr = com.fuse.Activity.getRootActivity().getContentResolver();
             Cursor cur = cr.query(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI, null, null, null, sortOrder);
+
+            // {TODO} add restriction
+
             if(cur != null)
             {
                 while(cur.moveToNext())
                 {
-                    String name = cur.getString(cur.getColumnIndex(MediaStore.Audio.Artists.ARTIST));
-                    @{ArtistQuery:Of(_this).PushResult(string):Call(name)};
+                    String artistName = cur.getString(cur.getColumnIndex(MediaStore.Audio.Artists.ARTIST));
+                    @{ArtistQuery:Of(_this).PushResult(string):Call(artistName)};
                 }
             }
             cur.close();
@@ -100,7 +106,58 @@ namespace Fuse.MediaQuery
 
         void OnPermitted(PlatformPermission permission)
         {
-            QueryInner(_artist);
+            QueryInner(_name);
+            Resolve();
+        }
+
+        void OnRejected(Exception e)
+        {
+            Reject("StreamingPlayer was not given permissions to play local files: " + e.Message);
+        }
+    }
+
+    //------------------------------------------------------------
+    // Albums
+
+    [ForeignInclude(Language.Java, "android.content.ContentResolver")]
+    [ForeignInclude(Language.Java, "android.database.Cursor")]
+    [ForeignInclude(Language.Java, "android.provider.MediaStore")]
+    [ForeignInclude(Language.Java, "com.fuse.MediaQuery.MMQB")]
+    extern(Android)
+    class AlbumQuery : AlbumPromise
+    {
+        string _name = "";
+
+        public AlbumQuery(string name)
+        {
+            _name = name;
+            var permissionPromise = Permissions.Request(Permissions.Android.WRITE_EXTERNAL_STORAGE);
+            permissionPromise.Then(OnPermitted, OnRejected);
+        }
+
+        [Foreign(Language.Java)]
+        public void QueryInner(string name)
+        @{
+            String sortOrder = MediaStore.Audio.Media.ALBUM+ " ASC";
+            ContentResolver cr = com.fuse.Activity.getRootActivity().getContentResolver();
+            Cursor cur = cr.query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, null, null, null, sortOrder);
+
+            // {TODO} add restriction
+
+            if(cur != null)
+            {
+                while(cur.moveToNext())
+                {
+                    String albumName = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
+                    @{AlbumQuery:Of(_this).PushResult(string):Call(albumName)};
+                }
+            }
+            cur.close();
+        @}
+
+        void OnPermitted(PlatformPermission permission)
+        {
+            QueryInner(_name);
             Resolve();
         }
 
@@ -110,17 +167,3 @@ namespace Fuse.MediaQuery
         }
     }
 }
-
-// Album Query
-// String sortOrder = MediaStore.Audio.Media.ALBUM+ " ASC";
-// ContentResolver cr = com.fuse.Activity.getRootActivity().getContentResolver();
-// Cursor cur = cr.query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, null, null, null, sortOrder);
-// if(cur != null)
-// {
-//     while(cur.moveToNext())
-//     {
-//         String artist = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
-//         ExternedBlockHost.callUno_Fuse_MediaQuery_TrackPromise_PushResult368((UnoObject)_this,(String)artist);
-//     }
-// }
-// cur.close();

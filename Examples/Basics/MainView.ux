@@ -10,6 +10,7 @@
             <Text Value="DooDad" Alignment="Center" FontSize="35" TextColor="#2586EC"/>
             <Basic.Button Text="Tracks" Clicked="{tracks}" />
             <Basic.Button Text="Artists" Clicked="{artists}" />
+            <Basic.Button Text="Albums" Clicked="{albums}" />
         </StackPanel>
         <BottomBarBackground Dock="Bottom" />
     </DockPanel>
