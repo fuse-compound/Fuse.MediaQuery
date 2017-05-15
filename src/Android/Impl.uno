@@ -19,10 +19,10 @@ namespace Fuse.MediaQuery
     extern(Android)
     class TrackQuery : TrackPromise
     {
-        string _path = "";
-        string _title = "";
-        string _artist = "";
-        string _album = "";
+        string _path;
+        string _title;
+        string _artist;
+        string _album;
 
         public TrackQuery(string artist)
         {
@@ -75,7 +75,7 @@ namespace Fuse.MediaQuery
     extern(Android)
     class ArtistQuery : ArtistPromise
     {
-        string _name = "";
+        string _name;
 
         public ArtistQuery(string name)
         {
@@ -87,11 +87,15 @@ namespace Fuse.MediaQuery
         [Foreign(Language.Java)]
         public void QueryInner(string name)
         @{
+            MMQB qb = MMQB.Music();
+            qb.AndArtist(requestedArtist);
+
+            String selection = qb.Build();
+
             String sortOrder = MediaStore.Audio.Media.ARTIST + " ASC";
+
             ContentResolver cr = com.fuse.Activity.getRootActivity().getContentResolver();
             Cursor cur = cr.query(MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI, null, null, null, sortOrder);
-
-            // {TODO} add restriction
 
             if(cur != null)
             {
@@ -126,17 +130,19 @@ namespace Fuse.MediaQuery
     extern(Android)
     class AlbumQuery : AlbumPromise
     {
-        string _name = "";
+        string _name;
+        string _artist;
 
-        public AlbumQuery(string name)
+        public AlbumQuery(string name, string artist)
         {
             _name = name;
+            _artist = artist;
             var permissionPromise = Permissions.Request(Permissions.Android.WRITE_EXTERNAL_STORAGE);
             permissionPromise.Then(OnPermitted, OnRejected);
         }
 
         [Foreign(Language.Java)]
-        public void QueryInner(string name)
+        public void QueryInner(string name, string artist)
         @{
             String sortOrder = MediaStore.Audio.Media.ALBUM+ " ASC";
             ContentResolver cr = com.fuse.Activity.getRootActivity().getContentResolver();
@@ -157,7 +163,7 @@ namespace Fuse.MediaQuery
 
         void OnPermitted(PlatformPermission permission)
         {
-            QueryInner(_name);
+            QueryInner(_name, _artist);
             Resolve();
         }
 

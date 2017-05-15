@@ -77,12 +77,36 @@ namespace Fuse.MediaQuery
         @}
     }
 
+    [ForeignInclude(Language.ObjC, "AVFoundation/AVFoundation.h")]
+    [ForeignInclude(Language.ObjC, "MediaPlayer/MediaPlayer.h")]
+    [Require("Xcode.Framework", "MediaPlayer")]
+    [Require("Xcode.Framework", "CoreImage")]
+    [ForeignInclude(Language.ObjC, "CoreImage/CoreImage.h")]
     extern(iOS)
     class AlbumQuery : AlbumPromise
     {
-        public AlbumQuery(string album)
+        public AlbumQuery(string name)
         {
+            QueryInner(name);
             Resolve();
         }
+
+        [Foreign(Language.ObjC)]
+        public void QueryInner(string name)
+        @{
+            MPMediaQuery* matches = [MPMediaQuery albumsQuery];
+
+            if (name!=NULL)
+            {
+                MPMediaPropertyPredicate* albumPred = [MPMediaPropertyPredicate predicateWithValue:name forProperty:MPMediaItemPropertyAlbumTitle];
+                [matches addFilterPredicate: albumPred];
+            }
+
+            for (MPMediaItem* match in [matches items])
+            {
+                NSString* album = match.albumTitle;
+                @{AlbumQuery:Of(_this).PushResult(string):Call(album)};
+            }
+        @}
     }
 }
