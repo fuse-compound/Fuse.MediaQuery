@@ -53,6 +53,7 @@ A track object looks like this:
     "album": "someAlbumName",
     "artist": "someArtistName"
     "path": "theFileSystemPathToTheFile"
+    "duration": 0.0 // length of track in seconds
 }
 ```
 
@@ -86,9 +87,9 @@ As before if we want to query for something we simply make a track object with t
 MediaQuery.tracks({album":"Booker's Guitar"}).then(function(tracksArray) { .. });
 ```
 
-### How about filtering by path?
+### How about filtering by path or duration?
 
-Sorry, but we don't support that.
+Sorry, but we don't support that. Duration would be cool, but we would want to be able to filter by a time range.
 
 ## How to query for Artists
 
@@ -114,6 +115,8 @@ For API consistency and because in future we want to allow searching with wildca
 
 I hope you find this library useful. It's an open source project under the MIT license and pull requests are very welcome.
 
-Please add issues for what you want added (but do check with the iOS & Android APIs to make sure it is possible!). Better yet, have a peek at the code! It's a really simple library and extending it is also simple. I'm `baggers` on the Fuse Community slack so feel free to ping me if you need anything explained.
+Please add issues for what you want added (but do check with the iOS & Android APIs to make sure it is possible!). Better yet, have a peek at the code! It's a really simple library and extending it is also simple, see [here for the commit](https://github.com/fuse-compound/Fuse.MediaQuery/commit/43af451052b44ab3b3bd828bb44ce1bcb37a3747) where we added `duration` to track.
+
+I'm `baggers` on the Fuse Community slack so feel free to ping me if you need anything explained.
 
 Peace
