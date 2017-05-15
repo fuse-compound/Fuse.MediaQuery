@@ -9,19 +9,19 @@ using Fuse.Scripting;
 
 namespace Fuse.MediaQuery
 {
-    public sealed class MusicItem
+    public sealed class TrackItem
     {
         public string Path;
 
-        public MusicItem(string path)
+        public TrackItem(string path)
         {
             Path = path;
         }
     }
 
-    class MusicPromise : Promise<List<MusicItem>>
+    class TrackPromise : Promise<List<TrackItem>>
     {
-        List<MusicItem> _results = new List<MusicItem>();
+        List<TrackItem> _results = new List<TrackItem>();
 
         protected void Resolve()
         {
@@ -35,7 +35,7 @@ namespace Fuse.MediaQuery
 
         protected void PushResult(string path)
         {
-            _results.Add(new MusicItem(path));
+            _results.Add(new TrackItem(path));
         }
     }
 }

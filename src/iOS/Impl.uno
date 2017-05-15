@@ -14,9 +14,9 @@ namespace Fuse.MediaQuery
     [Require("Xcode.Framework", "CoreImage")]
     [ForeignInclude(Language.ObjC, "CoreImage/CoreImage.h")]
     extern(iOS)
-    class MusicQuery : MusicPromise
+    class TrackQuery : TrackPromise
     {
-        public MusicQuery(string artist)
+        public TrackQuery(string artist)
         {
             QueryInner(artist);
             Resolve();
@@ -35,7 +35,7 @@ namespace Fuse.MediaQuery
 
             for (MPMediaItem* match in [matches items])
             {
-                @{MusicQuery:Of(_this).PushResult(string):Call([match.assetURL absoluteString])};
+                @{TrackQuery:Of(_this).PushResult(string):Call([match.assetURL absoluteString])};
             }
         @}
     }

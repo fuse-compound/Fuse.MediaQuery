@@ -14,11 +14,11 @@ namespace Fuse.MediaQuery
     [ForeignInclude(Language.Java, "android.provider.MediaStore")]
     [ForeignInclude(Language.Java, "com.fuse.MediaQuery.MMQB")]
     extern(Android)
-    class MusicQuery : MusicPromise
+    class TrackQuery : TrackPromise
     {
 
         string _artist;
-        public MusicQuery(string artist)
+        public TrackQuery(string artist)
         {
             _artist = artist;
             var permissionPromise = Permissions.Request(Permissions.Android.WRITE_EXTERNAL_STORAGE);
@@ -40,7 +40,7 @@ namespace Fuse.MediaQuery
                     String data = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.DATA));
                     String album = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ALBUM));
                     debug_log(data + album);
-                    @{MusicQuery:Of(_this).PushResult(string):Call(data)};
+                    @{TrackQuery:Of(_this).PushResult(string):Call(data)};
                 }
             }
             cur.close();
@@ -68,7 +68,7 @@ namespace Fuse.MediaQuery
 //     while(cur.moveToNext())
 //     {
 //         String artist = cur.getString(cur.getColumnIndex(MediaStore.Audio.Artists.ARTIST));
-//         ExternedBlockHost.callUno_Fuse_MediaQuery_MusicPromise_PushResult368((UnoObject)_this,(String)artist);
+//         ExternedBlockHost.callUno_Fuse_MediaQuery_TrackPromise_PushResult368((UnoObject)_this,(String)artist);
 //     }
 // }
 // cur.close();
@@ -82,7 +82,7 @@ namespace Fuse.MediaQuery
 //     while(cur.moveToNext())
 //     {
 //         String artist = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
-//         ExternedBlockHost.callUno_Fuse_MediaQuery_MusicPromise_PushResult368((UnoObject)_this,(String)artist);
+//         ExternedBlockHost.callUno_Fuse_MediaQuery_TrackPromise_PushResult368((UnoObject)_this,(String)artist);
 //     }
 // }
 // cur.close();

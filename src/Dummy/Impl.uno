@@ -9,9 +9,9 @@ using Fuse.Scripting;
 namespace Fuse.MediaQuery
 {
     extern(!MOBILE)
-    class MusicQuery : MusicPromise
+    class TrackQuery : TrackPromise
     {
-        public MusicQuery(string artist)
+        public TrackQuery(string artist)
         {
             Resolve();
         }

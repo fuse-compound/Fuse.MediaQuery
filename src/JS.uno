@@ -19,26 +19,26 @@ namespace Fuse.MediaQuery
             if(_instance != null) return;
             Resource.SetGlobalKey(_instance = this, "FuseJS/MediaQuery");
 
-            AddMember(new NativePromise<List<MusicItem>, Scripting.Array>("fetch", Fetch, MusicItemToJS));
+            AddMember(new NativePromise<List<TrackItem>, Scripting.Array>("fetch", Fetch, TrackItemToJS));
 
             AddMember(new NativeProperty<string, string>("Music", "music"));
         }
 
-        static Future<List<MusicItem>> Fetch(object[] args)
+        static Future<List<TrackItem>> Fetch(object[] args)
         {
             var queryObj = (Scripting.Object)args[0];
             var kind = (string)queryObj["kind"];
 
-            if (kind == "music")
-                return MusicQueryFromJS(queryObj);
+            if (kind == "track")
+                return TrackQueryFromJS(queryObj);
 
             debug_log "--- DIDNT MATCH ANY KIND ---";
             return null;
         }
 
-        static Future<List<MusicItem>> MusicQueryFromJS(Scripting.Object query)
+        static Future<List<TrackItem>> TrackQueryFromJS(Scripting.Object query)
         {
-            return new MusicQuery(TryGet<string>(query, "artist"));
+            return new TrackQuery(TryGet<string>(query, "artist"));
         }
 
         static T TryGet<T>(Scripting.Object obj, string key)
@@ -47,12 +47,13 @@ namespace Fuse.MediaQuery
         }
 
 
-        static Scripting.Array MusicItemToJS(Context c, List<MusicItem> cv)
+        static Scripting.Array TrackItemToJS(Context c, List<TrackItem> cv)
         {
             var arr = new List<object>();
             foreach (var track in cv)
             {
                 var jt = c.NewObject();
+                jt["kind"] = "track";
                 jt["path"] = track.Path;
                 arr.Add(jt);
             }
