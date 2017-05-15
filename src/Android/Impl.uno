@@ -88,7 +88,7 @@ namespace Fuse.MediaQuery
         public void QueryInner(string name)
         @{
             MMQB qb = MMQB.Music();
-            qb.AndArtist(requestedArtist);
+            //qb.AndArtist(r_artist);
 
             String selection = qb.Build();
 
@@ -142,11 +142,19 @@ namespace Fuse.MediaQuery
         }
 
         [Foreign(Language.Java)]
-        public void QueryInner(string name, string artist)
+        public void QueryInner(string r_name, string r_artist)
         @{
-            String sortOrder = MediaStore.Audio.Media.ALBUM+ " ASC";
+            MMQB qb = MMQB.Albums();
+
+            if (r_artist!=null)
+                qb.AndArtist(r_artist);
+
+            if (r_name!=null)
+                qb.AndAlbum(r_name);
+
+            String sortOrder = MediaStore.Audio.Media.ALBUM + " ASC";
             ContentResolver cr = com.fuse.Activity.getRootActivity().getContentResolver();
-            Cursor cur = cr.query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, null, null, null, sortOrder);
+            Cursor cur = cr.query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, null, qb.Build(), null, sortOrder);
 
             // {TODO} add restriction
 
@@ -154,8 +162,9 @@ namespace Fuse.MediaQuery
             {
                 while(cur.moveToNext())
                 {
-                    String albumName = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
-                    @{AlbumQuery:Of(_this).PushResult(string):Call(albumName)};
+                    String name = cur.getString(cur.getColumnIndex(MediaStore.Audio.Albums.ALBUM));
+                    String artist = cur.getString(cur.getColumnIndex(MediaStore.Audio.Artists.ARTIST));
+                    @{AlbumQuery:Of(_this).PushResult(string,string):Call(name, artist)};
                 }
             }
             cur.close();

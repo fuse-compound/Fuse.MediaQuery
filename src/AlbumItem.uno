@@ -12,10 +12,12 @@ namespace Fuse.MediaQuery
     public sealed class AlbumItem
     {
         public string Name;
+        public string Artist;
 
-        public AlbumItem(string name)
+        public AlbumItem(string name, string artist)
         {
             Name = name;
+            Artist = artist;
         }
     }
 
@@ -33,9 +35,9 @@ namespace Fuse.MediaQuery
             Reject(new Exception(message));
         }
 
-        protected void PushResult(string name)
+        protected void PushResult(string name, string artist)
         {
-            _results.Add(new AlbumItem(name));
+            _results.Add(new AlbumItem(name, artist));
         }
     }
 }

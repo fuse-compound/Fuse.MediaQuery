@@ -59,7 +59,7 @@ namespace Fuse.MediaQuery
 
         static Future<List<AlbumItem>> AlbumQueryFromJS(Scripting.Object query)
         {
-            return new AlbumQuery(TryGet<string>(query, "name"));
+            return new AlbumQuery(TryGet<string>(query, "name"), TryGet<string>(query, "artist"));
         }
 
         static Scripting.Array TrackItemToJS(Context c, List<TrackItem> cv)
@@ -96,6 +96,7 @@ namespace Fuse.MediaQuery
             {
                 var jt = c.NewObject();
                 jt["name"] = album.Name;
+                jt["artist"] = album.Artist;
                 arr.Add(jt);
             }
             return c.NewArray(arr.ToArray());

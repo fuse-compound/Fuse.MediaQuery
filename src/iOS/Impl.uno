@@ -85,27 +85,33 @@ namespace Fuse.MediaQuery
     extern(iOS)
     class AlbumQuery : AlbumPromise
     {
-        public AlbumQuery(string name)
+        public AlbumQuery(string name, string artist)
         {
-            QueryInner(name);
+            QueryInner(name, artist);
             Resolve();
         }
 
         [Foreign(Language.ObjC)]
-        public void QueryInner(string name)
+        public void QueryInner(string r_name, string r_artist)
         @{
             MPMediaQuery* matches = [MPMediaQuery albumsQuery];
 
-            if (name!=NULL)
+            if (r_name!=NULL)
             {
-                MPMediaPropertyPredicate* albumPred = [MPMediaPropertyPredicate predicateWithValue:name forProperty:MPMediaItemPropertyAlbumTitle];
+                MPMediaPropertyPredicate* albumPred = [MPMediaPropertyPredicate predicateWithValue:r_name forProperty:MPMediaItemPropertyAlbumTitle];
                 [matches addFilterPredicate: albumPred];
+            }
+            if (r_artist!=NULL)
+            {
+                MPMediaPropertyPredicate* artistPred = [MPMediaPropertyPredicate predicateWithValue:r_artist forProperty:MPMediaItemPropertyArtist];
+                [matches addFilterPredicate: artistPred];
             }
 
             for (MPMediaItem* match in [matches items])
             {
                 NSString* album = match.albumTitle;
-                @{AlbumQuery:Of(_this).PushResult(string):Call(album)};
+                NSString* artist = match.albumArtist;
+                @{AlbumQuery:Of(_this).PushResult(string,string):Call(album, artist)};
             }
         @}
     }

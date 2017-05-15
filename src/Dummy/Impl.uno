@@ -29,7 +29,7 @@ namespace Fuse.MediaQuery
     extern(!MOBILE)
     class AlbumQuery : AlbumPromise
     {
-        public AlbumQuery(string album)
+        public AlbumQuery(string album, string artist)
         {
             Resolve();
         }

@@ -19,15 +19,28 @@ public class MMQB //MiniMediaQueryBuilder
         return new MMQB(_isMusic);
     }
 
+    public static MMQB Albums()
+    {
+        return new MMQB("");
+    }
+
     public MMQB And(String query, String val)
     {
-        wip += " AND " + query.replace("~", DatabaseUtils.sqlEscapeString(val));
+        if (wip.equals(""))
+            wip = query.replace("~", DatabaseUtils.sqlEscapeString(val));
+        else
+            wip += " AND " + query.replace("~", DatabaseUtils.sqlEscapeString(val));
         return this;
     }
 
     public MMQB AndArtist(final String artist)
     {
         return And(MediaStore.Audio.Media.ARTIST + "=~", artist);
+    }
+
+    public MMQB AndAlbum(final String artist)
+    {
+        return And(MediaStore.Audio.Albums.ALBUM + "=~", artist);
     }
 
     public String Build()
