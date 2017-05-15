@@ -24,12 +24,12 @@ namespace Fuse.MediaQuery
             if(_instance != null) return;
             Resource.SetGlobalKey(_instance = this, "FuseJS/MediaQuery");
 
-            AddMember(new NativePromise<List<TrackItem>, Scripting.Array>("music", Music, TrackItemToJS));
+            AddMember(new NativePromise<List<TrackItem>, Scripting.Array>("tracks", Tracks, TrackItemToJS));
             AddMember(new NativePromise<List<ArtistItem>, Scripting.Array>("artists", Artists, ArtistItemToJS));
             AddMember(new NativePromise<List<AlbumItem>, Scripting.Array>("albums", Albums, AlbumItemToJS));
         }
 
-        static Future<List<TrackItem>> Music(object[] args)
+        static Future<List<TrackItem>> Tracks(object[] args)
         {
             var queryObj = (Scripting.Object)args[0];
             return TrackQueryFromJS(queryObj);

@@ -7,7 +7,7 @@ var tracks = function() {
 	var query = {
 		"artist": "Alan Gogoll"
 	};
-	MediaQuery.music(query).then(function(results) {
+	MediaQuery.tracks(query).then(function(results) {
 		var json_results = JSON.stringify(results);
 		console.log("Here it is!:" + json_results);
 	}).catch(function(e) {
