@@ -6,7 +6,7 @@ var doonIt = false;
 var foo = function() {
 	var query = {
 		"kind": MediaQuery.Music,
-		"artist": "Splen"
+		"artist": "Alan Gogoll"
 	};
 	MediaQuery.fetch(query).then(function(results) {
 		var json_results = JSON.stringify(results);
