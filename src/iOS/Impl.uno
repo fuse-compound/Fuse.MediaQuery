@@ -44,12 +44,36 @@ namespace Fuse.MediaQuery
         @}
     }
 
+    [ForeignInclude(Language.ObjC, "AVFoundation/AVFoundation.h")]
+    [ForeignInclude(Language.ObjC, "MediaPlayer/MediaPlayer.h")]
+    [Require("Xcode.Framework", "MediaPlayer")]
+    [Require("Xcode.Framework", "CoreImage")]
+    [ForeignInclude(Language.ObjC, "CoreImage/CoreImage.h")]
     extern(iOS)
     class ArtistQuery : ArtistPromise
     {
-        public ArtistQuery(string artist)
+        public ArtistQuery(string name)
         {
+            QueryInner(name);
             Resolve();
         }
+
+        [Foreign(Language.ObjC)]
+        public void QueryInner(string name)
+        @{
+            MPMediaQuery* matches = [MPMediaQuery artistsQuery];
+
+            if (name!=NULL)
+            {
+                MPMediaPropertyPredicate* artistPred = [MPMediaPropertyPredicate predicateWithValue:name forProperty:MPMediaItemPropertyArtist];
+                [matches addFilterPredicate: artistPred];
+            }
+
+            for (MPMediaItem* match in [matches items])
+            {
+                NSString* artist = match.artist;
+                @{ArtistQuery:Of(_this).PushResult(string):Call(artist)};
+            }
+        @}
     }
 }
