@@ -49,7 +49,8 @@ namespace Fuse.MediaQuery
                 NSString* title = match.title;
                 NSString* artist = match.artist;
                 NSString* album = match.albumTitle;
-                @{TrackQuery:Of(_this).PushResult(string,string,string,string):Call(path, title, artist, album)};
+                double duration = match.playbackDuration;
+                @{TrackQuery:Of(_this).PushResult(string,string,string,string,double):Call(path, title, artist, album, duration)};
             }
         @}
     }

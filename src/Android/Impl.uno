@@ -57,7 +57,8 @@ namespace Fuse.MediaQuery
                     String title = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.TITLE));
                     String artist = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ARTIST));
                     String album = cur.getString(cur.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-                    @{TrackQuery:Of(_this).PushResult(string,string,string,string):Call(path,title,artist,album)};
+                    double duration = ((double)cur.getLong(cur.getColumnIndex(MediaStore.Audio.Media.DURATION)))/1000.0;
+                    @{TrackQuery:Of(_this).PushResult(string,string,string,string,double):Call(path,title,artist,album,duration)};
                 }
             }
             cur.close();

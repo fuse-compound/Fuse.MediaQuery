@@ -72,6 +72,7 @@ namespace Fuse.MediaQuery
                 jt["title"] = track.Title;
                 jt["artist"] = track.Artist;
                 jt["album"] = track.Album;
+                jt["duration"] = track.Duration;
                 arr.Add(jt);
             }
             return c.NewArray(arr.ToArray());

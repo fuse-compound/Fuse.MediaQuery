@@ -15,13 +15,15 @@ namespace Fuse.MediaQuery
         public string Title;
         public string Artist;
         public string Album;
+        public double Duration;
 
-        public TrackItem(string path, string title, string artist, string album)
+        public TrackItem(string path, string title, string artist, string album, double duration)
         {
             Path = path;
             Title = title;
             Artist = artist;
             Album = album;
+            Duration = duration;
         }
     }
 
@@ -39,9 +41,9 @@ namespace Fuse.MediaQuery
             Reject(new Exception(message));
         }
 
-        protected void PushResult(string path, string title, string artist, string album)
+        protected void PushResult(string path, string title, string artist, string album, double duration)
         {
-            _results.Add(new TrackItem(path, title, artist, album));
+            _results.Add(new TrackItem(path, title, artist, album, duration));
         }
     }
 }
