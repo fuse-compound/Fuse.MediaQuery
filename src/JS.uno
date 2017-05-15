@@ -49,7 +49,7 @@ namespace Fuse.MediaQuery
 
         static Future<List<TrackItem>> TrackQueryFromJS(Scripting.Object query)
         {
-            return new TrackQuery(TryGet<string>(query, "artist"));
+            return new TrackQuery(TryGet<string>(query, "title"), TryGet<string>(query, "artist"), TryGet<string>(query, "album"));
         }
 
         static Future<List<ArtistItem>> ArtistQueryFromJS(Scripting.Object query)

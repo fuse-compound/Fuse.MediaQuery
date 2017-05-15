@@ -16,21 +16,31 @@ namespace Fuse.MediaQuery
     extern(iOS)
     class TrackQuery : TrackPromise
     {
-        public TrackQuery(string artist)
+        public TrackQuery(string title, string artist, string album)
         {
-            QueryInner(artist);
+            QueryInner(title, artist, album);
             Resolve();
         }
 
         [Foreign(Language.ObjC)]
-        public void QueryInner(string artist)
+        public void QueryInner(string r_title, string r_artist, string r_album)
         @{
             MPMediaQuery* matches = [[MPMediaQuery alloc] init];
 
-            if (artist!=NULL)
+            if (r_artist!=NULL)
             {
-                MPMediaPropertyPredicate* artistPred = [MPMediaPropertyPredicate predicateWithValue:artist forProperty:MPMediaItemPropertyArtist];
+                MPMediaPropertyPredicate* artistPred = [MPMediaPropertyPredicate predicateWithValue:r_artist forProperty:MPMediaItemPropertyArtist];
                 [matches addFilterPredicate: artistPred];
+            }
+            if (r_album!=NULL)
+            {
+                MPMediaPropertyPredicate* albumPred = [MPMediaPropertyPredicate predicateWithValue:r_album forProperty:MPMediaItemPropertyAlbumTitle];
+                [matches addFilterPredicate: albumPred];
+            }
+            if (r_title!=NULL)
+            {
+                MPMediaPropertyPredicate* titlePred = [MPMediaPropertyPredicate predicateWithValue:r_title forProperty:MPMediaItemPropertyTitle];
+                [matches addFilterPredicate: titlePred];
             }
 
             for (MPMediaItem* match in [matches items])

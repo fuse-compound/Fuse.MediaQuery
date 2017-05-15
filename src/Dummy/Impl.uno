@@ -11,7 +11,7 @@ namespace Fuse.MediaQuery
     extern(!MOBILE)
     class TrackQuery : TrackPromise
     {
-        public TrackQuery(string artist)
+        public TrackQuery(string title, string artist, string album)
         {
             Resolve();
         }

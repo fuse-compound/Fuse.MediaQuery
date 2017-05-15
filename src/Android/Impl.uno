@@ -24,7 +24,7 @@ namespace Fuse.MediaQuery
         string _artist;
         string _album;
 
-        public TrackQuery(string artist)
+        public TrackQuery(string title, string artist, string album)
         {
             _artist = artist;
             var permissionPromise = Permissions.Request(Permissions.Android.WRITE_EXTERNAL_STORAGE);
@@ -32,13 +32,23 @@ namespace Fuse.MediaQuery
         }
 
         [Foreign(Language.Java)]
-        public void QueryInner(string requestedArtist)
+        public void QueryInner(string r_title, string r_artist, string r_album)
         @{
-            String selection = MMQB.Music().AndArtist(requestedArtist).Build();
+            MMQB qb = MMQB.Tracks();
+
+            if (r_title!=null)
+                qb.AndTitle(r_title);
+
+            if (r_artist!=null)
+                qb.AndArtist(r_artist);
+
+            if (r_album!=null)
+                qb.AndArtist(r_album);
+
             String sortOrder = MediaStore.Audio.Media.TITLE + " ASC";
 
             ContentResolver cr = com.fuse.Activity.getRootActivity().getContentResolver();
-            Cursor cur = cr.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, selection, null, sortOrder);
+            Cursor cur = cr.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, qb.Build(), null, sortOrder);
             if(cur != null)
             {
                 while(cur.moveToNext())
@@ -55,7 +65,7 @@ namespace Fuse.MediaQuery
 
         void OnPermitted(PlatformPermission permission)
         {
-            QueryInner(_artist);
+            QueryInner(_title, _artist, _album);
             Resolve();
         }
 
@@ -155,8 +165,6 @@ namespace Fuse.MediaQuery
             String sortOrder = MediaStore.Audio.Media.ALBUM + " ASC";
             ContentResolver cr = com.fuse.Activity.getRootActivity().getContentResolver();
             Cursor cur = cr.query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, null, qb.Build(), null, sortOrder);
-
-            // {TODO} add restriction
 
             if(cur != null)
             {

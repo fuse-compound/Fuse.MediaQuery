@@ -14,12 +14,17 @@ public class MMQB //MiniMediaQueryBuilder
         wip = base;
     }
 
-    public static MMQB Music()
+    public static MMQB Tracks()
     {
         return new MMQB(_isMusic);
     }
 
     public static MMQB Albums()
+    {
+        return new MMQB("");
+    }
+
+    public static MMQB Artists()
     {
         return new MMQB("");
     }
@@ -41,6 +46,11 @@ public class MMQB //MiniMediaQueryBuilder
     public MMQB AndAlbum(final String artist)
     {
         return And(MediaStore.Audio.Albums.ALBUM + "=~", artist);
+    }
+
+    public MMQB AndTitle(final String title)
+    {
+        return And(MediaStore.Audio.Media.TITLE + "=~", title);
     }
 
     public String Build()
