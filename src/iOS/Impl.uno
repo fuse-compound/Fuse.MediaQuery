@@ -43,4 +43,13 @@ namespace Fuse.MediaQuery
             }
         @}
     }
+
+    extern(iOS)
+    class ArtistQuery : ArtistPromise
+    {
+        public ArtistQuery(string artist)
+        {
+            Resolve();
+        }
+    }
 }

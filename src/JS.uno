@@ -13,33 +13,36 @@ namespace Fuse.MediaQuery
     public sealed class MediaQueryModule : NativeEventEmitterModule
     {
         static readonly MediaQueryModule _instance;
-        static readonly string _trackQuery = "Music";
 
         public MediaQueryModule() : base(false)
         {
             if(_instance != null) return;
             Resource.SetGlobalKey(_instance = this, "FuseJS/MediaQuery");
 
-            AddMember(new NativePromise<List<TrackItem>, Scripting.Array>("fetch", Fetch, TrackItemToJS));
-
-            AddMember(new NativeProperty<string, string>("Music", _trackQuery));
+            AddMember(new NativePromise<List<TrackItem>, Scripting.Array>("music", Music, TrackItemToJS));
+            AddMember(new NativePromise<List<ArtistItem>, Scripting.Array>("artists", Artists, ArtistItemToJS));
         }
 
-        static Future<List<TrackItem>> Fetch(object[] args)
+        static Future<List<TrackItem>> Music(object[] args)
         {
             var queryObj = (Scripting.Object)args[0];
-            var kind = (string)queryObj["kind"];
+            return TrackQueryFromJS(queryObj);
+        }
 
-            if (kind == _trackQuery)
-                return TrackQueryFromJS(queryObj);
-
-            debug_log "--- DIDNT MATCH ANY KIND ---";
-            return null;
+        static Future<List<ArtistItem>> Artists(object[] args)
+        {
+            var queryObj = (Scripting.Object)args[0];
+            return ArtistQueryFromJS(queryObj);
         }
 
         static Future<List<TrackItem>> TrackQueryFromJS(Scripting.Object query)
         {
             return new TrackQuery(TryGet<string>(query, "artist"));
+        }
+
+        static Future<List<ArtistItem>> ArtistQueryFromJS(Scripting.Object query)
+        {
+            return new ArtistQuery(TryGet<string>(query, "artist"));
         }
 
         static T TryGet<T>(Scripting.Object obj, string key)
@@ -54,11 +57,22 @@ namespace Fuse.MediaQuery
             foreach (var track in cv)
             {
                 var jt = c.NewObject();
-                jt["kind"] = "track";
                 jt["path"] = track.Path;
                 jt["title"] = track.Title;
                 jt["artist"] = track.Artist;
                 jt["album"] = track.Album;
+                arr.Add(jt);
+            }
+            return c.NewArray(arr.ToArray());
+        }
+
+        static Scripting.Array ArtistItemToJS(Context c, List<ArtistItem> cv)
+        {
+            var arr = new List<object>();
+            foreach (var artist in cv)
+            {
+                var jt = c.NewObject();
+                jt["name"] = artist.Name;
                 arr.Add(jt);
             }
             return c.NewArray(arr.ToArray());

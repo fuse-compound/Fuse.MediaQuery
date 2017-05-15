@@ -16,4 +16,13 @@ namespace Fuse.MediaQuery
             Resolve();
         }
     }
+
+    extern(!MOBILE)
+    class ArtistQuery : ArtistPromise
+    {
+        public ArtistQuery(string artist)
+        {
+            Resolve();
+        }
+    }
 }

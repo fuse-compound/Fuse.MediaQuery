@@ -3,12 +3,21 @@ var MediaQuery = require("FuseJS/MediaQuery");
 
 var doonIt = false;
 
-var foo = function() {
+var tracks = function() {
 	var query = {
-		"kind": MediaQuery.Music,
 		"artist": "Alan Gogoll"
 	};
-	MediaQuery.fetch(query).then(function(results) {
+	MediaQuery.music(query).then(function(results) {
+		var json_results = JSON.stringify(results);
+		console.log("Here it is!:" + json_results);
+	}).catch(function(e) {
+		console.log("Well damn:" + e);
+	});
+};
+
+var artists = function() {
+	var query = {};
+	MediaQuery.artists(query).then(function(results) {
 		var json_results = JSON.stringify(results);
 		console.log("Here it is!:" + json_results);
 	}).catch(function(e) {
@@ -17,5 +26,6 @@ var foo = function() {
 };
 
 module.exports = {
-	foo: foo
+	tracks: tracks,
+	artists: artists
 };

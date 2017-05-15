@@ -8,7 +8,8 @@
         <StackPanel Width="92%" Height="460" Padding="20">
             <Rectangle Layer="Background" CornerRadius="10" Color="#fff"/>
             <Text Value="DooDad" Alignment="Center" FontSize="35" TextColor="#2586EC"/>
-            <Basic.Button Text="Foo" Clicked="{foo}" />
+            <Basic.Button Text="Tracks" Clicked="{tracks}" />
+            <Basic.Button Text="Artists" Clicked="{artists}" />
         </StackPanel>
         <BottomBarBackground Dock="Bottom" />
     </DockPanel>
