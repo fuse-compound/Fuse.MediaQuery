@@ -29,17 +29,20 @@ namespace Fuse.MediaQuery
 
             if (r_artist!=NULL)
             {
-                MPMediaPropertyPredicate* artistPred = [MPMediaPropertyPredicate predicateWithValue:r_artist forProperty:MPMediaItemPropertyArtist];
+                MPMediaPropertyPredicate* artistPred = [MPMediaPropertyPredicate predicateWithValue:r_artist forProperty:MPMediaItemPropertyArtist
+                                                        comparisonType:MPMediaPredicateComparisonContains];
                 [matches addFilterPredicate: artistPred];
             }
             if (r_album!=NULL)
             {
-                MPMediaPropertyPredicate* albumPred = [MPMediaPropertyPredicate predicateWithValue:r_album forProperty:MPMediaItemPropertyAlbumTitle];
+                MPMediaPropertyPredicate* albumPred = [MPMediaPropertyPredicate predicateWithValue:r_album forProperty:MPMediaItemPropertyAlbumTitle
+                                                       comparisonType:MPMediaPredicateComparisonContains];
                 [matches addFilterPredicate: albumPred];
             }
             if (r_title!=NULL)
             {
-                MPMediaPropertyPredicate* titlePred = [MPMediaPropertyPredicate predicateWithValue:r_title forProperty:MPMediaItemPropertyTitle];
+                MPMediaPropertyPredicate* titlePred = [MPMediaPropertyPredicate predicateWithValue:r_title forProperty:MPMediaItemPropertyTitle
+                                                       comparisonType:MPMediaPredicateComparisonContains];
                 [matches addFilterPredicate: titlePred];
             }
 
@@ -76,7 +79,8 @@ namespace Fuse.MediaQuery
 
             if (name!=NULL)
             {
-                MPMediaPropertyPredicate* artistPred = [MPMediaPropertyPredicate predicateWithValue:name forProperty:MPMediaItemPropertyArtist];
+                MPMediaPropertyPredicate* artistPred = [MPMediaPropertyPredicate predicateWithValue:name forProperty:MPMediaItemPropertyArtist
+                                                        comparisonType:MPMediaPredicateComparisonContains];
                 [matches addFilterPredicate: artistPred];
             }
 
@@ -109,12 +113,14 @@ namespace Fuse.MediaQuery
 
             if (r_name!=NULL)
             {
-                MPMediaPropertyPredicate* albumPred = [MPMediaPropertyPredicate predicateWithValue:r_name forProperty:MPMediaItemPropertyAlbumTitle];
+                MPMediaPropertyPredicate* albumPred = [MPMediaPropertyPredicate predicateWithValue:r_name forProperty:MPMediaItemPropertyAlbumTitle
+                                                       comparisonType:MPMediaPredicateComparisonContains];
                 [matches addFilterPredicate: albumPred];
             }
             if (r_artist!=NULL)
             {
-                MPMediaPropertyPredicate* artistPred = [MPMediaPropertyPredicate predicateWithValue:r_artist forProperty:MPMediaItemPropertyArtist];
+                MPMediaPropertyPredicate* artistPred = [MPMediaPropertyPredicate predicateWithValue:r_artist forProperty:MPMediaItemPropertyArtist
+                                                        comparisonType:MPMediaPredicateComparisonContains];
                 [matches addFilterPredicate: artistPred];
             }
 
