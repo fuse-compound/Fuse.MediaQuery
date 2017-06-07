@@ -97,7 +97,7 @@ As before here is the artist object
 
 ```
 {
-    "artist": "someArtistName"
+    "name": "someArtistName"
 }
 ```
 
