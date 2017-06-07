@@ -35,6 +35,9 @@ namespace Fuse.MediaQuery
 
         protected void PushResult(string name)
         {
+            foreach (var i in _results)
+                if (i.Name == name)
+                    return;
             _results.Add(new ArtistItem(name));
         }
     }
