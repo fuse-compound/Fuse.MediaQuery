@@ -1,13 +1,18 @@
 {
-    "Packages": [
-        "Fuse",
-        "FuseJS",
-        "Fuse.BasicTheme"
-    ],
-    "Projects": [
-        "../../src/Fuse.MediaQuery.unoproj",
-    ],
-    "Includes": [
-        "*",
-    ]
+  "Packages": [
+    "Fuse",
+    "FuseJS",
+    "Fuse.BasicTheme"
+  ],
+  "Projects": [
+    "../../src/Fuse.MediaQuery.unoproj",
+  ],
+  "iOS": {
+    "PList": {
+      "NSAppleMusicUsageDescription": "Your plausible reasons for being allowed to use the device's features go here"
+    }
+  },
+  "Includes": [
+    "*",
+  ]
 }

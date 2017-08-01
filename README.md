@@ -111,6 +111,16 @@ MediaQuery.artists({}).then(function(tracksArray) { .. });
 
 For API consistency and because in future we want to allow searching with wildcards.
 
+### Help! On iOS 10 I get a crash because I hadnt set NSAppleMusicUsageDescription in the plist
+
+To fix this add something like the following in your unoproj:
+
+    "iOS": {
+        "PList": {
+            "NSAppleMusicUsageDescription": "Your description goes here"
+        }
+    }
+
 ## That's all for now!
 
 I hope you find this library useful. It's an open source project under the MIT license and pull requests are very welcome.
