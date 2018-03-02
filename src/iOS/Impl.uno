@@ -45,7 +45,7 @@ namespace Fuse.MediaQuery
                                                        comparisonType:MPMediaPredicateComparisonContains];
                 [matches addFilterPredicate: titlePred];
             }
-
+            [matches addFilterPredicate:[MPMediaPropertyPredicate predicateWithValue:[NSNumber numberWithBool:NO] forProperty:MPMediaItemPropertyIsCloudItem]];
             for (MPMediaItem* match in [matches items])
             {
                 NSString* path = [match.assetURL absoluteString];
