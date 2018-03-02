@@ -121,6 +121,10 @@ To fix this add something like the following in your unoproj:
         }
     }
 
+### I can't see some tracks that itunes shows me
+
+Most likely those tracks are still in iCloud, we do not return these currently. Please open a ticket if you need them.
+
 ## That's all for now!
 
 I hope you find this library useful. It's an open source project under the MIT license and pull requests are very welcome.
